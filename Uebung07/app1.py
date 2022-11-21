@@ -23,7 +23,7 @@ file.close()
 
 @app.get("/ort")
 async def ort(ort:str):
-    if ort in d:
+    if ort in d: 
         return d[ort]
     
     return {"ERROR": "ORTSCHAFT GIBT ES NICHT"}
