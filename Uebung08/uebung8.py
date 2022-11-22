@@ -16,7 +16,7 @@ templates = Jinja2Templates(directory="templates/")
 SECRET = "secret-key"
 
 manager = LoginManager(SECRET, token_url="/auth/login", use_cookie=True)
-manager.cookie_name = "aöslkdjflkasdjgnkldfjtwlejtkljlkjbkjdkljfgkjaslkjdgjasölkdjgklasuilthrnbglkvjksjlöditleröldnvl"
+manager.cookie_name = "cookie-name"
 
 
 database = databases.Database("sqlite:///database.db")
