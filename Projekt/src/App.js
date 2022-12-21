@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, GeoJSON} from 'react-leaflet'
-import { Alert, AlertTitle, MenuItem, Select, Tooltip } from '@mui/material';
+import { Alert, AlertTitle, BottomNavigation, Button,  MenuItem, Select, FormControl, InputLabel} from '@mui/material';
 import axios from "axios";
 import Toolbar from '@mui/material/Toolbar';
 import AppBar from '@mui/material/AppBar';
@@ -9,8 +9,14 @@ import Typography from "@mui/material/Typography";
 import Paper from '@mui/material/Paper'
 
 
+
 import "leaflet/dist/leaflet.css";
 import { red } from '@mui/material/colors';
+
+
+
+
+
 
 function App() {
   const [data, setData] = useState(null);
@@ -28,15 +34,26 @@ function App() {
     {value: 'Aéorport de Paris Charles de Gaulle', text: 'Aéorport de Paris Charles de Gaulle (Frankreich)'},
     {value: 'Flughafen Berlin Brandenburg', text: 'Flughafen Berlin Brandenburg (Deutschland)'},
     {value: 'Flughafen Frankfurt Main', text: 'Flughafen Frankfurt Main (Deutschland)'},
-    {value: 'Flughafen Kairo-International', text: 'Flughafen Kairo-International (Ägypten)'}
+    {value: 'Flughafen Kairo-International', text: 'Flughafen Kairo-International (Ägypten)'},
+    {value: 'Hartsfield-Jackson Atlanta Airport', text: 'Hartsfield-Jackson Atlanta Airport (USA)'},
+    {value: 'Chicago O’Hare International Airport', text: 'Chicago O’Hare International Airport (USA)'},
+    {value: 'Los Angeles International Airport', text: 'Los Angeles International Airport (USA)'},
+    {value: 'Las Vegas McCarran International Airport', text: 'Las Vegas McCarran International Airport (USA)'},
+    {value: 'Johannesburg O.R Tambo Internation Airport', text: 'Johannesburg O.R Tambo Internation Airport (RSA)'},
+    {value: 'Kapstadt International Airport', text: 'Kapstadt Internatiol Airport (RSA)'}
   ]
-  const [fin, setfinn] = useState(airports[0].value);
-  const [fout, setfoutt] = useState(airports[1].value);
+  const [fin, setfinn] = useState("");
+  const [fout, setfoutt] = useState("");
   const mystyle = {padding: 4}
   const mystyle1 = {margin: 8}
   const mystyle2 = {color: "red"}
   const mystyle3 = {padding: 4}
   const mystyle4 = {marginLeft: 15}
+
+
+ 
+   
+
 
   const style = { 
     appBar: { 
@@ -44,7 +61,7 @@ function App() {
         
     }, 
     paper: {
-        color: "black", 
+        color: "white", 
         margin: 5, 
         padding: 4,
         fontSize:'30px',   
@@ -60,7 +77,7 @@ function App() {
     iconUrl: require("leaflet/dist/images/marker-icon.png"),
     shadowUrl: require("leaflet/dist/images/marker-shadow.png")
     });
-    do_download1([-0.18263989409720086,51.15235296503555, -73.78466299589385,40.64583089596164]);
+    do_download1([-90,90,-90,90]);
     }, []);
 
   useEffect(() => {
@@ -79,7 +96,7 @@ function App() {
         setData(response.data);
       })
       .catch((err) => {
-        setError("ERROR API Aufruf fehlgeschlagen");
+        setError("WARNUNG API Aufruf fehlgeschlagen!! Bitte stellen Sie sicher, dass sowohl eine Startdestination als auch eine Zieldestination ausgewählt wurde!!");
       })
       .finally(() => {
         setLoading(false);
@@ -87,7 +104,7 @@ function App() {
   }
 
   function getCord(place) {
-    if (place === "London Heathrow Airport") {
+    if(place === "London Heathrow Airport") {
       return [-0.451967, 51.470035]
     } else if (place === "New York John F. Kennedy Airport") {
       return [-73.784413, 40.643170]
@@ -109,6 +126,18 @@ function App() {
       return [8.570456,50.033306]
     } else if (place === 'Flughafen Kairo-International'){
       return [31.405556,30.121944]
+    } else if (place === 'Hartsfield-Jackson Atlanta Airport'){
+      return [-84.427778,33.639167]
+    } else if (place === 'Chicago O’Hare International Airport'){
+      return [-87.904842, 41.978603 ]
+    } else if (place === 'Los Angeles International Airport'){
+      return [-118.408075,33.942536]
+    } else if (place === 'Las Vegas McCarran International Airport'){
+      return [-115.15225,36.080056]
+    } else if (place === 'Johannesburg O.R Tambo Internation Airport'){
+      return [28.242317,-26.133694]
+    } else if (place === 'Kapstadt International Airport'){
+      return [18.597222, -33.969444]
     }
 
   }
@@ -119,7 +148,7 @@ function App() {
       setError(null)
       do_download1(getCord(ffin).concat(getCord(fout)))
     } else if (fout === ffin) {
-      setError("Start- und Zielflughafen können nicht identisch sein, bitte wählen Sie ein anderer Start- oder Zielflughafen!")
+      setError("Start- und Zieldestination können nicht identisch sein, bitte wählen Sie ein anderer Start- oder Zieldestination!")
       
       do_download1(getCord(ffin).concat(getCord(fout)))
     }
@@ -132,7 +161,7 @@ function App() {
       setError(null)
       do_download1(getCord(fin).concat(getCord(ffout)))
     } else if (ffout === fin) {
-      setError("Start- und Zielflughafen können nicht identisch sein, bitte wählen Sie ein anderer Start- oder Zielflughafen!")
+      setError("Start- und Zieldestination können nicht identisch sein, bitte wählen Sie ein anderer Start- oder Zieldestination!")
       
       do_download1(getCord(fin).concat(getCord(ffout)))
     }
@@ -144,31 +173,38 @@ function App() {
     <AppBar position='sticky' color="primary" style={style.appBar}> 
       <Toolbar > 
         <Grid container justifyContent="flex-end"  background-color="primary"> 
-          <Grid item xs={12} sm={6} md='flex' > 
-            <Typography style={style.paper}>FLUGPLAN</Typography> 
+          <Grid item xs={12} sm={12} md='flex'  > 
+            <Typography style={style.paper}>Darstellung verschiedener Flugrouten</Typography> 
           </Grid>
-          <Grid item xs={12} sm={2} md='flex' > 
-            <label for="airport-in" style={mystyle3}><strong>Wählen Sie ihren Flug:</strong></label>
+        </Grid>
+      </Toolbar>
+    </AppBar>
+        <Grid container justifyContent='flex-end'>   
+          <Grid item xs={12} sm={4} md='flex' padding={2}> 
+            <Typography h2> <strong>Bitte Wählen sie ihre gewünschte Flugroute</strong></Typography>
           </Grid>
-          <Grid item xs={12} sm={4} md='flex' > 
-            <Paper>
-                <label for="airport-in" style={mystyle}>Startdestination</label>
+          <Grid item xs={12} sm={4} md='flex' padding={2}> 
+            <FormControl fullWidth>
+              <InputLabel>Startdestination</InputLabel>
+                
               <Select id="airport-in" style={mystyle1} label = "Start Flughafen" size="6" value={fin} onChange={o => setfin(o.target.value)} >
                 {airports.map(airport => (<MenuItem key={airport.value} value={airport.value}>{airport.text}</MenuItem>))}
               </Select>
-            </Paper>
+            </FormControl>
           </Grid>
-          <Grid item xs={12} sm={4} md='flex'>
-            <Paper>
-                <label for="airport-out" style={mystyle}>Zieldestination</label>
-              <Select id="airport-out" style={mystyle1}  size="6" value={fout} onChange={o => setfout(o.target.value)} >
-                {airports.map(airport => (<MenuItem key={airport.value} value={airport.value}>{airport.text}</MenuItem>))}
+          <Grid item xs={12} sm={4} md='flex' padding={2}>
+            <FormControl fullWidth>
+              <InputLabel>Zieldestination</InputLabel>
+                
+              <Select id="airport-out" style={mystyle1} label="Zieldestination" size="6" value={fout} onChange={o => setfout(o.target.value)} >
+                {airports.map(airport => (<MenuItem key={airport.value} value={airport.value} >{airport.text}</MenuItem>))}
               </Select>
-            </Paper> 
+              
+            </FormControl> 
           </Grid>
       </Grid> 
-      </Toolbar>
-    </AppBar>
+      
+    
 
       {error &&   <>
         <Alert variant='outlined'  severity='error'>
@@ -185,23 +221,29 @@ function App() {
       }
 
       {data &&  <>
-        <MapContainer center={[32.421975, 8.533351]} zoom={2} scrollWheelZoom={true} worldCopyJump={true} minZoom={2}
+        <MapContainer center={[32.421975, 8.533351]} zoom={2} maxBounds={[[-90,-180],[90,180]]} scrollWheelZoom={true} worldCopyJump={true} minZoom={2}
                     style={{ height: "593px", width: "100%" }} >
-                  <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  <TileLayer noWrap={true} url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                   attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'/>
               <GeoJSON data={data} ref={geoJsonLayer} style={{ weight: 8, opacity: '30%', color: 'green'}}/>
       </MapContainer>
+     
+       </>}
+
+       
+    
+      <BottomNavigation >
+        <Grid item xs={12} sm={8} md='flex' padding={2}>
+          <Typography>Erstellt von A. Bricalli, F. Waltisberg, J. Wörgau / FHNW Institut Geomatik / Version 1.0.0  </Typography>
+        </Grid>
+        <Grid item xs={12} sm={4} md='flex' padding={2}>
+          <Button variant='contained' href='https://www.fhnw.ch/de/die-fhnw/hochschulen/architektur-bau-geomatik/institute/institut-geomatik'>ÜBER UNS</Button>
+        </Grid>
+      </BottomNavigation>
+
 
       
-
-      
-      
-                </>}
-
-      <Tooltip placement='bottom-start'>
-        <Typography  variant="body2" style={mystyle4}>Erstellt von Andrea Bricalli, Fabian Waltisberg, Jonas Wörgau</Typography>
-      </Tooltip>
-
+   
       </>
   );
 }
