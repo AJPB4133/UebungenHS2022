@@ -38,8 +38,8 @@ function App() {
     {value: 'Chicago O’Hare International Airport', text: 'Chicago O’Hare International Airport (USA)'},
     {value: 'Los Angeles International Airport', text: 'Los Angeles International Airport (USA)'},
     {value: 'Las Vegas McCarran International Airport', text: 'Las Vegas McCarran International Airport (USA)'},
-    {value: 'Johannesburg O.R Tambo Internation Airport', text: 'Johannesburg O.R Tambo Internation Airport (RSA)'},
-    {value: 'Kapstadt International Airport', text: 'Kapstadt Internatiol Airport (RSA)'}
+    {value: 'Johannesburg O.R Tambo Internation Airport', text: 'Johannesburg O.R Tambo International Airport (RSA)'},
+    {value: 'Kapstadt International Airport', text: 'Kapstadt International Airport(RSA)'}
   ]
   const [fin, setfinn] = useState("");
   const [fout, setfoutt] = useState("");
