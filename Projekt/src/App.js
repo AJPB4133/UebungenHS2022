@@ -26,7 +26,6 @@ function App() {
   const airports = [
     {value: 'London Heathrow Airport', text: 'London Heathrow Airport (England)'},
     {value: 'New York John F. Kennedy Airport', text: 'New York John F. Kennedy Airport (USA)'},
-    {value: 'Kapstadt International Airport', text: 'Kapstadt International Airport (Südafrika)'},
     {value: 'Buenos Aires Ezeiza Airport', text: 'Buenos Aires Ezeiza Airport (Argentinien)'},
     {value: 'Dubai International Airport', text: 'Dubai International Airport (Vereinigten Arabischen Emirate)'},
     {value: 'Zurich Flughafen', text: 'Zürich Flughafen (Schweiz)'},
@@ -51,7 +50,7 @@ function App() {
   const mystyle4 = {marginLeft: 15}
 
 
- 
+  
    
 
 
@@ -77,7 +76,7 @@ function App() {
     iconUrl: require("leaflet/dist/images/marker-icon.png"),
     shadowUrl: require("leaflet/dist/images/marker-shadow.png")
     });
-    do_download1([-90,90,-90,90]);
+    do_download1([-180,90,-180,90]);
     }, []);
 
   useEffect(() => {
@@ -96,7 +95,7 @@ function App() {
         setData(response.data);
       })
       .catch((err) => {
-        setError("WARNUNG API Aufruf fehlgeschlagen!! Bitte stellen Sie sicher, dass sowohl eine Startdestination als auch eine Zieldestination ausgewählt wurde!!");
+        setError();
       })
       .finally(() => {
         setLoading(false);
@@ -108,8 +107,6 @@ function App() {
       return [-0.451967, 51.470035]
     } else if (place === "New York John F. Kennedy Airport") {
       return [-73.784413, 40.643170]
-    } else if (place === "Kapstadt International Airport") {
-      return [18.599725, -33.971036]
     } else if (place === "Buenos Aires Ezeiza Airport") {
       return [-58.543104, -34.810920]
     } else if (place === "Dubai International Airport") {
@@ -181,13 +178,13 @@ function App() {
     </AppBar>
         <Grid container justifyContent='flex-end'>   
           <Grid item xs={12} sm={4} md='flex' padding={2}> 
-            <Typography h2> <strong>Bitte Wählen sie ihre gewünschte Flugroute</strong></Typography>
+            <Typography h2> <strong>Bitte wählen Sie ihre gewünschte Flugroute</strong></Typography>
           </Grid>
           <Grid item xs={12} sm={4} md='flex' padding={2}> 
             <FormControl fullWidth>
               <InputLabel>Startdestination</InputLabel>
                 
-              <Select id="airport-in" style={mystyle1} label = "Start Flughafen" size="6" value={fin} onChange={o => setfin(o.target.value)} >
+              <Select id="airport-in" style={mystyle1}  size="6" value={fin} onChange={o => setfin(o.target.value)} >
                 {airports.map(airport => (<MenuItem key={airport.value} value={airport.value}>{airport.text}</MenuItem>))}
               </Select>
             </FormControl>
@@ -195,11 +192,9 @@ function App() {
           <Grid item xs={12} sm={4} md='flex' padding={2}>
             <FormControl fullWidth>
               <InputLabel>Zieldestination</InputLabel>
-                
-              <Select id="airport-out" style={mystyle1} label="Zieldestination" size="6" value={fout} onChange={o => setfout(o.target.value)} >
+              <Select id="airport-out" style={mystyle1}  size="6" value={fout} onChange={o => setfout(o.target.value)} >
                 {airports.map(airport => (<MenuItem key={airport.value} value={airport.value} >{airport.text}</MenuItem>))}
               </Select>
-              
             </FormControl> 
           </Grid>
       </Grid> 
@@ -247,5 +242,6 @@ function App() {
       </>
   );
 }
+
 
 export default App;
